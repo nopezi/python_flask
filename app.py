@@ -1,5 +1,6 @@
-from flask import Flask, render_template, request, make_response
+from flask import Flask, render_template, request, make_response, session, url_for, redirect
 app = Flask(__name__)
+app.secret_key = '1969903800'
 
 @app.route('/')
 def index():
@@ -29,9 +30,24 @@ def show_blog(blog_id):
 @app.route('/login', methods=['GET', 'POST'])
 def show_login():
     if request.method == 'POST':
+        
         resp = make_response('Email adalah : ' + request.form['email'])
         resp.set_cookie('email_user', request.form['email'])
+        session['email'] = request.form['email']
+
+        # dataemail = request.form['email']
+        # datapassword = request.form['password']
         return resp
+
+    if 'email' in session:
+        email = session['email']
+
+        if email == "":
+            kembali = render_template('login.html', text='kosong bro')
+            # kosong = make_response('<script>if (window.confirm("kosong bro")) {window.location.href="http://localhost:5000/login"}</script>')
+            return  kembali
+
+        return redirect(url_for('show_profile', username=email))
 
     return render_template('login.html')
 
@@ -39,3 +55,8 @@ def show_login():
 def getCookie():
     email = request.cookies.get('email_user')
     return 'Email yang tersimpan di cookie adalah ' + email
+
+@app.route('/logout')
+def logout():
+    session.pop('email', None)
+    return redirect(url_for('show_login'))    

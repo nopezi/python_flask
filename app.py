@@ -1,4 +1,6 @@
-from flask import Flask, render_template, request, make_response, session, url_for, redirect
+from flask import (Flask, render_template, request, make_response, session, 
+                   url_for, redirect, flash)
+
 app = Flask(__name__)
 app.secret_key = '1969903800'
 
@@ -31,17 +33,17 @@ def show_blog(blog_id):
 def show_login():
     if request.method == 'POST':
         
-        resp = make_response('Email adalah : ' + request.form['email'])
-        resp.set_cookie('email_user', request.form['email'])
+        # resp = make_response('Email adalah : ' + request.form['email'])
+        # resp.set_cookie('email_user', request.form['email'])
         session['email'] = request.form['email']
-
+        flash('anda berhasil login', 'sukses')
         # dataemail = request.form['email']
         # datapassword = request.form['password']
-        return resp
+        return redirect(url_for('show_profile', username=session['email']))
 
     if 'email' in session:
         email = session['email']
-
+        
         if email == "":
             kembali = render_template('login.html', text='kosong bro')
             # kosong = make_response('<script>if (window.confirm("kosong bro")) {window.location.href="http://localhost:5000/login"}</script>')

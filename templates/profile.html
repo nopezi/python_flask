@@ -27,6 +27,18 @@
 </div>
 
 <body>
+
+    {% with messages = get_flashed_messages() %}
+
+        {% if messages %}
+            {% for messages in messages %}
+                {{ messages }}
+            {% endfor %}
+        {% endif %}
+
+    {% endwith %}
+
+    <hr>
         
     <div class="container">
         <h1>ini halaman profile {{ username }}</h1>

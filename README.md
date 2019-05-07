@@ -5,4 +5,4 @@ untuk menjalankan web menggunakan command di bawah ini : <br>
 <b> flask run </b>
 
 
-" 
+ 

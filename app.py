@@ -3,7 +3,14 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    search = request.args.get('search')
+    video = request.args.get('video')
+    if not search:
+        return render_template('index.html')
+    if not video:
+        return 'hasil search adalah ' + search
+        
+    return 'hasil search adalah ' + search + ' video nya adalah ' + video
 
 @app.route('/setting')
 def show_setting():

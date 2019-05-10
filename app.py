@@ -1,6 +1,6 @@
 from flask import (Flask, render_template, request, make_response, session, 
                    url_for, redirect, flash)
-import pymysql
+import database
 
 app = Flask(__name__)
 app.secret_key = '1969903800'
@@ -64,11 +64,11 @@ def logout():
     session.pop('email', None)
     return redirect(url_for('show_login'))
 
-@app.route('/data')
-def data():
-    connection = pymysql.connect(host='localhost', user='root', password='', db='profil')
-    with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM `posting`")
-        all = cursor.fetchall()
-        print(all)
-        return str(all[0])
+# @app.route('/data')
+# def data():
+#     connection = pymysql.connect(host='localhost', user='root', password='', db='profil')
+#     with connection.cursor() as cursor:
+#         cursor.execute("SELECT * FROM `posting`")
+#         all = cursor.fetchall()
+#         print(all)
+#         return str(all[0])

@@ -1,5 +1,7 @@
 
 membuat website menggunakan mini framework python_flask <br>
+link template nya di : <br>
+http://www.urbanui.com/spica/template/demo/vertical-default-light/pages/tables/data-table.html<br>
 untuk menjalankan web menggunakan command di bawah ini : <br>
 install flask <br>
 <b>pip install flask</b><br>

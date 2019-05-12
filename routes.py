@@ -1,9 +1,36 @@
-from flask import (Flask, render_template, request, make_response, session, 
-                   url_for, redirect, flash)
-import database
+# from app import app
+from flask import Flask, render_template, request, make_response, session, url_for, redirect, flash
+from flaskext.mysql import MySQL
+from datetime import datetime
+import import_tahun
+
+# import mysql.connector
+# import mysql.connector
 
 app = Flask(__name__)
+
+mysql = MySQL()
+
+# mysql configuration
+app.config['MYSQL_DATABASE_USER'] = 'e4YsvvDdqe'
+app.config['MYSQL_DATABASE_PASSWORD'] = '6nH3Dk1LiE'
+app.config['MYSQL_DATABASE_DB'] = 'e4YsvvDdqe'
+app.config['MYSQL_DATABASE_HOST'] = 'remotemysql.com'
+
+mysql.init_app(app)
+
 app.secret_key = '1969903800'
+
+
+
+@app.route('/artikel')
+def coba():
+    conn = mysql.connect()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM posting")
+    result = cursor.fetchall()
+
+    return render_template('artikel.html', result=result)
 
 @app.route('/')
 def index():
@@ -26,9 +53,13 @@ def show_setting():
 def show_profile(username):
     return render_template('profile.html', username=username)
 
+# FUNGSI UNTUK MENAMPILKAN BLOG
+
 @app.route('/blog/<int:blog_id>')
 def show_blog(blog_id):
     return 'ini adalah halaman blog %s' % blog_id
+
+# FUNGSI UNTUK LOGIN
 
 @app.route('/login', methods=['GET', 'POST'])
 def show_login():
@@ -54,15 +85,44 @@ def show_login():
 
     return render_template('login.html')
 
+# FUNGSI UNTUK MENGAMBIL COOKIE BROWSER
+
 @app.route('/getcookie')
 def getCookie():
     email = request.cookies.get('email_user')
     return 'Email yang tersimpan di cookie adalah ' + email
 
+# FUNGSI LOGOUT
+
 @app.route('/logout')
 def logout():
     session.pop('email', None)
     return redirect(url_for('show_login'))
+
+@app.route('/admin')
+def admin():
+    return render_template('admin/login.html')
+
+@app.route('/admin/login', methods=['GET' 'POST'])
+def admin_login():
+    return "oke"
+
+@app.route('/admin/home')
+def admin_home():
+
+    return render_template('admin/home.html')
+
+@app.route('/admin/posting')
+def admin_posting():
+    conn = mysql.connect()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM posting")
+    result = cursor.fetchall()
+    no = 1
+    tahun = import_tahun.tahun()
+    return render_template('admin/posting.html', result=result, no=no, tahun=tahun)
+
+
 
 # @app.route('/data')
 # def data():
@@ -72,3 +132,6 @@ def logout():
 #         all = cursor.fetchall()
 #         print(all)
 #         return str(all[0])
+
+if __name__ == '__main__':
+    app.run(debug=True, port=2019)
